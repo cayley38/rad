@@ -110,7 +110,7 @@ int main(void){
 
 	FILE *output;
 	FILE *nbscat;
-	output=fopen("test2.txt","a");
+	output=fopen("test4.txt","a");
 	nbscat=fopen("partnum1.txt","a");
 			for(i=0;i<N;i++){
 				fprintf(output,"%g\t%g\n",gamma[i],fgamma[i]);
@@ -186,7 +186,7 @@ int main(void){
 				gdotm=0.005*gamma[j]*gamma[j]*(1.+0.01*integralm);		
 				V3 = (DT*gdotp )/ deltaGamma;
 				V2 = 1. + (DT*gdotm )/ deltaGamma;
-			  	fgammatemp[j] = (fgamma[j] + V3*fgammatemp[j+1])/V2;
+			  	fgammatemp[j] = (fgamma[j] +Source(gamma[j])*DT+ V3*fgammatemp[j+1])/V2;
 
 				// Norm computation:
 				if(fgammatp1[j]!=0){
@@ -222,7 +222,7 @@ int main(void){
 		}
 
 
-*/
+
 
 		for(j=0;j<N;j++){
 			fgamma[j]=fgammatp1[j];
@@ -231,7 +231,7 @@ int main(void){
 			}
 		}
 
-
+*/
 
 
 
