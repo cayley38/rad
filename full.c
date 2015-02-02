@@ -20,14 +20,14 @@
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 /// Initial parameters of the shell
-#define G0 200
+#define G0 300
+#define E0 1e52
 #define M0 0.005
 
-#define epsilon_b 1.e-8
 #define xi_B 1
 #define xe_e 0.5
 #define n 1
-#define s -2.2
+#define s -3
 #define rzero 1e14
 
 
@@ -193,7 +193,7 @@ int evol_distrib_function(double *G, double *gamma, double *fgamma, double *fgam
 
 				// COmpute the integral
 				integralp=0.;
-				if(epsilon_b<1./G[j+1]){
+				if(epsilonb<1./G[j+1]){
 					for(k=j+1;k<N-2;k++){
 						if(1./(epsilonb*G[j+1])>G[k]){
 							integralp += G[k]*G[k]*fgammatp1[k]*(G[k+1]-G[k]);
@@ -201,7 +201,7 @@ int evol_distrib_function(double *G, double *gamma, double *fgamma, double *fgam
 					}
 				}
 				integralm=0.;
-				if(epsilon_b<1./G[j]){
+				if(epsilonb<1./G[j]){
 					for(k=j;k<N-2;k++){
 						if(1./(epsilonb*G[j])>G[k]){
 							integralm += G[k]*G[k]*fgammatp1[k]*(G[k+1]-G[k]);
@@ -396,11 +396,12 @@ int main(void){
 
 	int i,ii,itnum;
 	int j;
-	double t,r;
+	double t,r,ta;
     r=1.;
-	double step=1e-2;
-	double rmax=200;
+	double step=5.;
+	double rmax=20000;
 	t=1;
+	ta=0.;
     double dtcom;
     double dV;
 	//double rho,M,m,gam,dr,dt;
@@ -411,15 +412,15 @@ int main(void){
     double fullsol[4];
 	double summ[3],sum1[3];
 
-	hydron[0]= 300;
+	hydron[0]= G0;
 	hydron[1]= 0;
-	hydron[2]= 1e5;
+	hydron[2]= E0/(4.*pi*mp*n*rzero*rzero*rzero*c*c*G0);
 
-	hydrontemp[0]= 1000;
+	hydrontemp[0]= 10.*G0;
 	hydrontemp[1]= 1;
 	hydrontemp[2]= 1e5;
 
-	hydronp1[0]= 300;
+	hydronp1[0]= 10.*G0;
 	hydronp1[1]= 5;
 	hydrontemp[2]= 1e5;
 
@@ -430,6 +431,8 @@ int main(void){
     output1=fopen("dynamics_unit.txt","a");
     //output2=fopen("dynamics_adia.txt","a");
 
+    printf("G=%g\tM=%g\n",hydron[0],hydron[2]);
+    getchar();
 
 	////// Distribution function at r should be also known:
 	//double deltaGamma;
@@ -600,8 +603,9 @@ int main(void){
 			hydron[ii]=hydronp1[ii];
 		}
 		r=r+step;
-		fprintf(output,"%.13g\t%.13g\t%.13g\t%.13g\n",r,hydron[0],hydron[1],hydron[2]);
-		fprintf(output1,"%.13g\t%.13g\t%.13g\t%.13g\n",fullsol[3],fullsol[0],fullsol[1],fullsol[2]);
+		ta+=step*rzero/(2.*hydron[0]*hydron[0]*c*bet);
+		fprintf(output,"%.13g\t%.13g\t%.13g\t%.13g\t%.13g\n",r,ta,hydron[0],hydron[1],hydron[2]);
+		fprintf(output1,"%.13g\t%.13g\t%.13g\t%.13g\t%.13g\n",fullsol[3],ta,fullsol[0],fullsol[1],fullsol[2]);
         //r=r+step;
         //printf("r=%g\tGamma=%.13g\tEint=%.13g\tM=%.13g\n",r,hydron[0],hydron[1],hydron[2]);
         //printf("End of loop\n\n");
