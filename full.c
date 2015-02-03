@@ -20,9 +20,9 @@
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 /// Initial parameters of the shell
-#define G0 300
-#define E0 1e52
-#define M0 0.005
+#define G0 300      // Initial Lorentz factor
+#define E0 1e52     // Total energy of the blast wave: ergs
+//#define M0 0.005
 
 #define xi_B 1
 #define xe_e 0.5
@@ -38,7 +38,7 @@
 #define N 1000
 
 //#define DT 0.0005
-#define DG 0.01
+//#define DG 0.01
 
 
 
@@ -399,7 +399,7 @@ int main(void){
 	double t,r,ta;
     r=1.;
 	double step=5.;
-	double rmax=20000;
+	double rmax=200;
 	t=1;
 	ta=0.;
     double dtcom;
